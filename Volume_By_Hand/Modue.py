@@ -13,6 +13,11 @@ mpHands = mp.solutions.hands
 hands = mpHands.Hands()
 mpDraw = mp.solutions.drawing_utils
 
+# Defining the variable for frame_rate change
+
+past_Time = 0
+current_Time = 0
+
 # Code to capture/Run the Webcam Continues unless break key
 while True:
     success , img = Video.read()
@@ -27,6 +32,16 @@ while True:
     if results.multi_hand_landmarks:
         for handLms in results.multi_hand_landmarks:
             mpDraw.draw_landmarks(img,handLms, mpHands.HAND_CONNECTIONS) # mpHands.HAND_CONNECTIONS Basiclly connect all the hand points
+
+
+    # Defining the FPS
+    current_Time = time.time()
+    fps = 1/(current_Time-past_Time)
+    past_Time = current_Time
+
+    # Displaying the fps on Screen And font,size ETC
+
+    cv2.putText(img,str(int(fps)),(10,70),cv2.FONT_HERSHEY_PLAIN,3,(255,0,255),3)
 
 
 
