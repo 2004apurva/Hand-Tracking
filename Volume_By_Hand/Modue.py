@@ -50,8 +50,8 @@ while True:
                 print(id,cx,cy)
 
                 # Detecting the id:0 of landmark and circling it
-                # Basically  tracking particular lm id in hand 
-                if id ==0:
+                # Basically  tracking particular lm id in hand
+                if id == 0:
                     cv2.circle(img,(cx,cy),25,(255,0,255),cv2.FILLED)
 
 
