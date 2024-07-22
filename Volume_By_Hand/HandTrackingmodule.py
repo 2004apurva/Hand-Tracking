@@ -5,9 +5,9 @@ import mediapipe as mp
 import time
 
 
-class handDetector():
+class handdetector():
     # Self means providing it the value by the user
-    def __init__(self,mode=False, maxHands= 2,detectionCon=0.5,trackCon=0.5):
+    def __init__(self , mode=False, maxHands= 2, detectionCon=0.5, trackCon=0.5):
         self.mode = mode
         self.maxHands = maxHands
         self.detectionCon = detectionCon
@@ -18,7 +18,7 @@ class handDetector():
         # Using the Mediapipe framework
 
         self.mpHands = mp.solutions.hands
-        self.hands = self.mpHands.Hands(self,mode, self.maxHands,self.detectionCon,self.trackCon)
+        self.hands = self.mpHands.Hands(self.mode, self.maxHands,self.detectionCon , self.trackCon)
         self.mpDraw = mp.solutions.drawing_utils
 
     def findHands(self , img , draw=True):
@@ -26,13 +26,13 @@ class handDetector():
         #Converting the original video to RGB
 
         imgRGB = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
-        self.results = self.hands.process(imgRGB)  # This will process the frame for us and give the result
+        results = self.hands.process(imgRGB)  # This will process the frame for us and give the result
 
     # Detects if there is an the hand in the webcam or not
     # Multi_hand  can also can be detected
 
-        if self.results.multi_hand_landmarks:
-            for handLms in self.results.multi_hand_landmarks:
+        if results.multi_hand_landmarks:
+            for handLms in results.multi_hand_landmarks:
                 if draw:
                     self.mpDraw.draw_landmarks(img, handLms, self.mpHands.HAND_CONNECTIONS)  # mpHands.HAND_CONNECTIONS Basically connect all the hand points
         return img
@@ -63,7 +63,7 @@ def main():
     # Saving the Webcam Video in an variable
 
     Video = cv2.VideoCapture(0)
-    detector = handDetector()
+    detector = handdetector()
 
     while True:
         success, img = Video.read()
@@ -94,5 +94,5 @@ def main():
     cv2.destroyAllWindows()
 
 
-if  __name__== "main__":
+if __name__ == "main__":
     main()
