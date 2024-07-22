@@ -21,7 +21,7 @@ class handDetector():
         self.hands = self.mpHands.Hands(self,mode, self.maxHands,self.detectionCon,self.trackCon)
         self.mpDraw = mp.solutions.drawing_utils
 
-    def  findHands(self , img , draw=True):
+    def findHands(self , img , draw=True):
 
         #Converting the original video to RGB
 
