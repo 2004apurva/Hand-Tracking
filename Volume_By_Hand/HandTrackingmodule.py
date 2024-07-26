@@ -31,30 +31,46 @@ class handdetector():
         #Converting the original video to RGB
 
         imgRGB = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
-        results = self.hands.process(imgRGB)  # This will process the frame for us and give the result
+        self.results = self.hands.process(imgRGB)  # This will process the frame for us and give the result
 
     # Detects if there is an the hand in the webcam or not
     # Multi_hand  can also can be detected
 
-        if results.multi_hand_landmarks:
-            for handLms in results.multi_hand_landmarks:
+        if self.results.multi_hand_landmarks:
+            for handLms in self.results.multi_hand_landmarks:
                 if draw:
                     self.mpDraw.draw_landmarks(img, handLms, self.mpHands.HAND_CONNECTIONS)  # mpHands.HAND_CONNECTIONS Basically connect all the hand points
         return img
-            # This line show the coordinates of each landmark in x,y,z
+    
+    def findPosition(self, img , handNo=0, draw=True):
+        lmlist = []
 
-            # for id, lm in enumerate(handLms.landmark):
-            #
-            #     h, w, c = img.shape  # Height , width , channel of the inage
-            #
-            #     # For finding the position of the center cx,cy are the center position
-            #     cx, cy = int(lm.x * w), int(lm.y * h)  # x and y here are the coordinates of landmark
-            #     print(id, cx, cy)
-            #
-            #     # Detecting the id:0 of landmark and circling it
-            #     # Basically  tracking particular lm id in hand
-            #     if id == 0:
-            #         cv2.circle(img, (cx, cy), 25, (255, 0, 255), cv2.FILLED)
+        if self.results.multi_hand_landmarks:
+            myHand = self.results.multi_hand_landmarks[handNo]
+
+
+        # This line show the coordinates of each landmark in x,y,z
+
+            for id, lm in enumerate(myHand.landmark):
+
+
+                
+                h, w, c = img.shape  # Height , width , channel of the inage
+                
+                # For finding the position of the center cx,cy are the center position
+                cx, cy = int(lm.x * w), int(lm.y * h)  # x and y here are the coordinates of landmark
+                #print(id, cx, cy)
+                lmlist.append([id,cx,cy])
+
+                if draw:
+
+                
+                # Detecting the id:0 of landmark and circling it
+                # Basically  tracking particular lm id in hand
+                
+                    cv2.circle(img, (cx, cy), 15, (255, 0, 255), cv2.FILLED)
+            
+        return lmlist
 
 
 
@@ -73,7 +89,11 @@ def main():
     while True:
         success, img = Video.read()
         img = detector.findHands(img)
-
+        lmlist = detector.findPosition(img)
+        if len(lmlist) != 0:
+            print(lmlist[4]) # This will give the desired point from the 21 hand points
+        
+        
         # Defining the FPS
 
         current_Time = time.time()
